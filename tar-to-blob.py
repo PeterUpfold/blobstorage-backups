@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 #
-# Mysqldump-to-blob
+# Tar-to-blob
 #
-# Run a mysqldump and store as an Azure Blob Storage blob
+# Run a file backup with tar and store as an Azure Blob Storage blob
 #
 # Copyright 2019 Peter Upfold
 #
@@ -20,15 +20,18 @@ config = yaml.safe_load(config_file)
 block_blob_service = BlockBlobService(account_name=config['account_name'], account_key=config['account_key'])
 
 # run mysqldump
-proc = subprocess.Popen(['/usr/bin/mysqldump', '-A', '--skip-extended-insert', '-r', config['mysqldump_file_output']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+proc = subprocess.Popen(['/bin/tar', '--same-owner', '-cJpvf', config['tar_file_output'], config['tar_file_directory']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
 output, err = proc.communicate()
 
 
 if proc.returncode != 0:
 	print("Failed to run mysqldump")
-	payload = { 'token': config['pushover_api_token'], 'user': config['pushover_user_key'], 'message': 'mysqldump-to-blob.py backup returned exit code ' + str(proc.returncode) }
+
+	payload = { 'token': config['pushover_api_token'], 'user': config['pushover_user_key'], 'message': 'tar-to-blob.py backup returned exit code ' + str(proc.returncode) }
 	requests.post(config['pushover_endpoint'], data=payload)
+
 	sys.exit(proc.returncode)
 
-block_blob_service.create_blob_from_path(config['container_name'], config['blob_name'], config['mysqldump_file_output'])
+block_blob_service.create_blob_from_path(config['container_name'], config['tar_blob_name'], config['tar_file_output'])
 
