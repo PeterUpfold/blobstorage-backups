@@ -4,6 +4,7 @@ mysqldump_file_output:
 container_name:
 blob_name: 
 tar_blob_name:
+tar_file_output: 
 tar_file_directory:
 pushover_api_token:
 pushover_user_key:
