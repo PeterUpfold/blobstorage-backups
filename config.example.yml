@@ -1,10 +1,10 @@
 account_name: 
 account_key: 
-mysqldump_file_output: 
+mysqldump_file_output: /tmp/somefile.sql
 container_name:
 blob_name: 
 tar_blob_name:
-tar_file_output: 
+tar_file_output: /tmp/somefile.tar.xz
 tar_file_directory:
 pushover_api_token:
 pushover_user_key:

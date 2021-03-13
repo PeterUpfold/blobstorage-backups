@@ -13,6 +13,7 @@ from azure.storage.blob import BlockBlobService
 import yaml
 import subprocess
 import requests
+import os
 
 config_file = open('config.yml', 'r')
 config = yaml.safe_load(config_file)
@@ -32,3 +33,4 @@ if proc.returncode != 0:
 
 block_blob_service.create_blob_from_path(config['container_name'], config['blob_name'], config['mysqldump_file_output'])
 
+os.remove(config['mysqldump_file_output'])
