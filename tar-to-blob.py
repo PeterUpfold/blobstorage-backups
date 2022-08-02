@@ -21,7 +21,7 @@ config = yaml.safe_load(config_file)
 block_blob_service = BlockBlobService(account_name=config['account_name'], account_key=config['account_key'])
 
 # run mysqldump
-proc = subprocess.Popen(['/bin/tar', '--same-owner', '-cJpvf', config['tar_file_output'], config['tar_file_directory']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+proc = subprocess.Popen(['/bin/tar', '--same-owner', '-czpvf', config['tar_file_output'], config['tar_file_directory']], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 output, err = proc.communicate()
 
